@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.decadev.westwing.DataModel.Data
@@ -26,25 +27,40 @@ class WestWingAdapter(
     }
 
     override fun onBindViewHolder(holder: WestWingViewHolder, position: Int) {
+      val campaignsDataList = listofCampaigns[position]
 
-        Glide.with(context).load(listofCampaigns[position].image.url).into(holder.imagesView)
+
+      holder.bind(campaignsDataList, clickImage)
+
     }
 
     override fun getItemCount(): Int {
         return listofCampaigns.size
     }
 
-    inner class WestWingViewHolder(binding: WestwingCampaignViewsBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        var imagesView = itemView.findViewById<ImageView>(R.id.westwingImage)
+    inner class WestWingViewHolder( val binding: WestwingCampaignViewsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+//        var imagesView = itemView.findViewById<ImageView>(R.id.westwingImage)
+//        var westWingMainScreenText = itemView.findViewById<TextView>(R.id.westWing_mainscreen_textView)
 
-        init {
-            itemView.setOnClickListener(this)
+        fun bind(campaignList: Data, clickItem: ImageClickListener) {
+            binding.westWingMainscreenTextView.text = campaignList.name
+            Glide.with(context).load(campaignList.image.url).into(binding.westwingImage)
+
+            binding.westwingImage.setOnClickListener {
+                clickItem.imageClick(adapterPosition)
+            }
         }
 
-        override fun onClick(v: View?) {
-            clickImage.imageClick(adapterPosition)
-        }
+//        init {
+//            westWingMainScreenText.text = listofCampaigns[adapterPosition].name
+//            Glide.with(context).load(listofCampaigns[adapterPosition].image.url).into(imagesView)
+//            itemView.setOnClickListener(this)
+//        }
+
+//        override fun onClick(v: View?) {
+//            clickImage.imageClick(adapterPosition)
+//        }
 
 
     }
